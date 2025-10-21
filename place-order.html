@@ -48,10 +48,10 @@
         <div class="form-group">
           <select name="product" required>
             <option value="">--Select--</option>
-            <option value="resin-frame">Resin Frame - ₹1200</option>
-            <option value="resin-nameplate">Resin Nameplate - ₹1500</option>
-            <option value="resin-ocean-art">Resin Ocean Art - ₹1800</option>
-            <option value="resin-led-frame">Resin LED Frame - ₹2000</option>
+            <option value="resin-frame">Resin Frame - ₹10</option>
+            <option value="resin-nameplate">Resin Nameplate - ₹150</option>
+            <option value="resin-ocean-art">Resin Ocean Art - ₹180</option>
+            <option value="resin-led-frame">Resin LED Frame - ₹20</option>
             <option value="custom-order">Custom Order</option>
           </select>
         </div>
@@ -115,11 +115,11 @@
       // Set amount based on product
       let amount = 0;
       switch(product) {
-        case "resin-frame": amount = 1*100; break;
-        case "resin-nameplate": amount = 1500*100; break;
-        case "resin-ocean-art": amount = 1800*100; break;
-        case "resin-led-frame": amount = 2000*100; break;
-        case "custom-order": amount = 2500*100; break; // default for custom
+        case "resin-frame": amount = 10*100; break;
+        case "resin-nameplate": amount = 150*100; break;
+        case "resin-ocean-art": amount = 180*100; break;
+        case "resin-led-frame": amount = 20*100; break;
+        case "custom-order": amount = 250*100; break; // default for custom
       }
 
       var options = {
