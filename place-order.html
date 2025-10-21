@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Place Order - Resin Studio</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
   <!-- Header -->
@@ -36,37 +37,29 @@
     <div class="container order-form-container">
       <form id="order-form">
         <div class="form-group">
-          <label for="name">Name *</label>
-          <input type="text" id="name" name="name" placeholder="Your Name" required>
+          <input type="text" name="name" placeholder="Your Name" required>
         </div>
         <div class="form-group">
-          <label for="email">Email *</label>
-          <input type="email" id="email" name="email" placeholder="Your Email" required>
+          <input type="email" name="email" placeholder="Your Email" required>
         </div>
         <div class="form-group">
-          <label for="phone">Phone *</label>
-          <input type="tel" id="phone" name="phone" placeholder="Your Phone" required>
+          <input type="tel" name="phone" placeholder="Your Phone" required>
         </div>
         <div class="form-group">
-          <label for="product">Select Product / Custom Order *</label>
-          <select id="product" name="product" required>
+          <select name="product" required>
             <option value="">--Select--</option>
-            <option value="resin-frame">Resin Frame</option>
-            <option value="resin-nameplate">Resin Nameplate</option>
-            <option value="resin-ocean-art">Resin Ocean Art</option>
-            <option value="resin-led-frame">Resin LED Frame</option>
+            <option value="resin-frame">Resin Frame - ₹1200</option>
+            <option value="resin-nameplate">Resin Nameplate - ₹1500</option>
+            <option value="resin-ocean-art">Resin Ocean Art - ₹1800</option>
+            <option value="resin-led-frame">Resin LED Frame - ₹2000</option>
             <option value="custom-order">Custom Order</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="image">Upload Image (optional)</label>
-          <input type="file" id="image" name="image" accept="image/*">
+          <textarea name="notes" rows="4" placeholder="Additional Notes / Instructions"></textarea>
         </div>
-        <div class="form-group">
-          <label for="notes">Additional Notes</label>
-          <textarea id="notes" name="notes" rows="4" placeholder="Any specific instructions?"></textarea>
-        </div>
-        <button type="submit" class="btn">Submit Order</button>
+
+        <button type="button" id="payButton" class="btn">Pay Now</button>
       </form>
     </div>
   </section>
@@ -104,6 +97,54 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // Razorpay Integration
+    document.getElementById("payButton").onclick = function(e) {
+      e.preventDefault();
+      const form = document.getElementById("order-form");
+      const name = form.querySelector('input[name="name"]').value;
+      const email = form.querySelector('input[name="email"]').value;
+      const phone = form.querySelector('input[name="phone"]').value;
+      const product = form.querySelector('select[name="product"]').value;
+
+      if(!name || !email || !phone || !product) {
+        alert("Please fill all required fields!");
+        return;
+      }
+
+      // Set amount based on product
+      let amount = 0;
+      switch(product) {
+        case "resin-frame": amount = 1200*100; break;
+        case "resin-nameplate": amount = 1500*100; break;
+        case "resin-ocean-art": amount = 1800*100; break;
+        case "resin-led-frame": amount = 2000*100; break;
+        case "custom-order": amount = 2500*100; break; // default for custom
+      }
+
+      var options = {
+        "key": "rzp_test_RW6Q5eS5lnQ3x7", // Your Razorpay Key ID
+        "amount": amount,
+        "currency": "INR",
+        "name": "Resin Studio",
+        "description": product,
+        "image": "assets/images/resin1.jpg",
+        "handler": function(response){
+          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+          form.reset();
+        },
+        "prefill": {
+          "name": name,
+          "email": email,
+          "contact": phone
+        },
+        "theme": {
+          "color": "#ff6b6b"
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
 </body>
 </html>
